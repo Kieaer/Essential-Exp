@@ -17,6 +17,7 @@ repositories {
 dependencies {
     compileOnly 'com.github.Anuken.Arc:arc-core:v104.6'
     compileOnly 'com.github.Anuken.Mindustry:core:v104.6'
+    implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
 }
 
 jar {
@@ -25,7 +26,7 @@ jar {
 }
 
 shadowJar {
-    archiveFileName = "Essentials.jar" // remove jar classifier and version
+    archiveFileName = "Essential-Exp.jar" // remove jar classifier and version
     minimize() // remove unused classes
 }
 
