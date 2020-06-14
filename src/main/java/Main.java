@@ -1,71 +1,45 @@
 import arc.ApplicationListener;
 import arc.Core;
+import arc.Events;
 import arc.struct.Array;
+import arc.struct.ArrayMap;
 import arc.util.Align;
 import arc.util.Log;
+import mindustry.content.Blocks;
+import mindustry.content.Bullets;
 import mindustry.content.Mechs;
+import mindustry.entities.Units;
 import mindustry.entities.type.Player;
+import mindustry.entities.type.Unit;
+import mindustry.game.EventType;
+import mindustry.game.Team;
 import mindustry.gen.Call;
 import mindustry.mod.Mods;
 import mindustry.plugin.Plugin;
+import mindustry.world.Block;
+import mindustry.world.Tile;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
-import static mindustry.Vars.mods;
-import static mindustry.Vars.playerGroup;
+import static mindustry.Vars.*;
 
 public class Main extends Plugin {
     public ApplicationListener listener;
-    public Connection conn;
+    public Connection conn = null;
     public Map<String, Integer> data = new HashMap<>();
     Thread mainThread;
     TimerTask tickThread;
     Timer timer = new Timer();
 
-    private static Array<Float> multipilers = new Array<>();
-    private static Array<PlayerData> playerData = new Array<>();
+    private static final Array<Float> multipilers = new Array<>();
+    private static final Array<PlayerData> playerData = new Array<>();
+
+    boolean active = false;
 
     public Main() {
 
     }
-
-    /*public void updateData(boolean clean){
-        if(clean) {
-            data.clear();
-            playerData = new JsonObject();
-        }
-        try(PreparedStatement pstmt = conn.prepareStatement("SELECT * from players")){
-            try(ResultSet rs = pstmt.executeQuery()) {
-                ResultSetMetaData meta = rs.getMetaData();
-                final int columnCount = meta.getColumnCount();
-
-                JsonObject buffer = new JsonObject();
-                while (rs.next()) {
-                    data.put(rs.getString("name"), rs.getInt("level"));
-
-                    for (int i = 1; i <= columnCount; i++) {
-                        int type = meta.getColumnType(i);
-                        if(type == Types.CLOB){
-                            buffer.add(meta.getColumnName(i).toLowerCase(), rs.getString(meta.getColumnName(i)));
-                        } else if(type == Types.TINYINT){
-                            buffer.add(meta.getColumnName(i).toLowerCase(), rs.getBoolean(meta.getColumnName(i)));
-                        } else if(type == Types.INTEGER){
-                            buffer.add(meta.getColumnName(i).toLowerCase(), rs.getInt(meta.getColumnName(i)));
-                        } else {
-                            System.out.println(meta.getColumnName(i).toLowerCase()+" // " +rs.getObject(meta.getColumnName(i))+ "//" + rs.getType());
-                        }
-                    }
-                    playerData.add(rs.getString("uuid"), buffer);
-                }
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-    }*/
 
     public PlayerData updateData(String uuid) {
         try (PreparedStatement pstmt = conn.prepareStatement("SELECT * from players WHERE uuid=?")) {
@@ -85,84 +59,185 @@ public class Main extends Plugin {
 
     @Override
     public void init() {
-        boolean work = false;
-
-        //try {
-        //    TimeUnit.SECONDS.sleep(2);
-        //} catch (InterruptedException e) {
-        //    e.printStackTrace();
-        //}
         for (Mods.LoadedMod mods : mods.list()) {
             if (mods.meta.name.equals("Essentials")) {
-                work = true;
+                Log.info("Essential-Exp activated!");
+                try {
+                    // DB 설정
+                    org.h2.Driver.load();
+                    conn = DriverManager.getConnection("jdbc:h2:tcp://localhost:9079/player", "", "");
+
+                    // 배수 계산
+                    float buffer = 0.993f;
+                    for (int a = 0; a < 200; a++) {
+                        buffer = buffer + 0.012f;
+                        multipilers.add(buffer);
+                    }
+
+                    // 메인 스레드 설정
+                    Random r = new Random();
+                    listener = new ApplicationListener() {
+                        @Override
+                        public void dispose() {
+                            timer.cancel();
+                            mainThread.interrupt();
+                        }
+                    };
+
+                    Core.app.addListener(listener);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                mainThread = new Thread(() -> {
+                    while (!Thread.currentThread().isInterrupted()) {
+                        for (Player player : playerGroup.all()) {
+                            PlayerData data = updateData(player.uuid);
+
+                            if (!data.uuid.equals("Unauthorized")) {
+                                float multipiler = multipilers.get(data.level);
+                                player.mech.health = 200 * multipiler;
+                                player.mech.mineSpeed = Mechs.alpha.mineSpeed * multipiler;
+                                player.mech.weapon.bullet.damage = 20 * multipiler;
+
+                                String message = "Name: " + player.name + "\nLevel: " + data.level + "\nExp: " + data.reqtotalexp + "\nMultipiler: " + multipilers.get(data.level) + "x";
+                                Call.onInfoPopup(player.con, message, 1f, Align.topLeft, 150, 0, 0, 0);
+                                Call.onInfoToast(player.con, "체력: " + player.mech.health + "\n채광 속도:" + player.mech.mineSpeed + "\n공격력: " + player.mech.weapon.bullet.damage, 1f);
+                            }
+                        }
+
+                        sleep(1000);
+                    }
+                });
+                mainThread.start();
                 break;
             }
         }
+        if (conn == null) Log.info("Essential-Exp must have Essentials to use the playerDB.");
 
-        if (work) {
-            Log.info("Essential-Exp activated!");
-            try {
-                // DB 설정
-                org.h2.Driver.load();
-                conn = DriverManager.getConnection("jdbc:h2:tcp://localhost:9079/player", "", "");
-
-                // 배수 계산
-                float buffer = 0.993f;
-                for (int a = 0; a < 100; a++) {
-                    buffer = buffer + 0.007f;
-                    for (int b = 0; b < 5; b++) {
-                        multipilers.add(buffer);
-                    }
-                }
-
-                // 메인 스레드 설정
-                listener = new ApplicationListener() {
-                    @Override
-                    public void update() {
-                        for (Player player : playerGroup.all()) {
-                            Call.onInfoPopup(player.con, "Health: " + player.health, 0.016f, Align.left, 40, 0, 0, 0);
-                        }
-                    }
-
-                    @Override
-                    public void dispose() {
-                        timer.cancel();
-                        mainThread.interrupt();
-                    }
-                };
-
-                Core.app.addListener(listener);
-            } catch (SQLException e) {
-                e.printStackTrace();
+        Events.on(EventType.PlayEvent.class, e -> {
+            String name = world.getMap().name();
+            System.out.println(name);
+            if (name.equals("Bullet")) {
+                active = true;
+                System.out.println("ACTIVATED");
             }
+        });
 
-            mainThread = new Thread(() -> {
-                while (!Thread.currentThread().isInterrupted()) {
-                    for (Player player : playerGroup.all()) {
-                        PlayerData data = updateData(player.uuid);
+        ArrayMap<Tile, Thread> blockThread = new ArrayMap<>();
 
-                        if (!data.uuid.equals("Unauthorized")) {
-                            float multipiler = multipilers.get(data.level);
-                            player.mech.health = 200 * multipiler;
-                            player.mech.mineSpeed = Mechs.alpha.mineSpeed * multipiler;
+        Events.on(EventType.TileChangeEvent.class, e -> {
+            Team team = Team.crux;
 
-                            String message = "Name: " + player.name + "\nLevel: " + data.level + "\nExp: " + data.reqtotalexp + "\nMultipiler: " + multipilers.get(data.level) + "x";
-                            Call.onInfoPopup(player.con, message, 1f, Align.left, 0, 0, 68, 0);
+            if (active) {
+                for (int x = 0; x < world.width(); x++) {
+                    for (int y = 0; y < world.height(); y++) {
+                        Tile tile = world.tile(x, y);
+                        if (tile.block() != null || tile.link().block() != null) {
+                            Block block = tile.link().block();
+                            float drawx = tile.link().drawx();
+                            float drawy = tile.link().drawy();
+
+                            if (block == Blocks.scrapWall) {
+                                if (!blockThread.containsKey(tile)) {
+                                    int sx = x;
+                                    int sy = y;
+                                    Thread thread = new Thread(() -> {
+                                        while (there(sx, sy, Blocks.scrapWall)) {
+                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 0f, 1f, 1f);
+                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 90f, 1f, 1f);
+                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 180f, 1f, 1f);
+                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 270f, 1f, 1f);
+                                            if (there(sx, sy, Blocks.scrapWall)) sleep(500);
+                                        }
+                                        blockThread.removeKey(tile);
+                                    });
+                                    blockThread.put(tile, thread);
+                                    thread.start();
+                                }
+                            } else if (block == Blocks.scrapWallLarge) {
+                                if (!blockThread.containsKey(tile)) {
+                                    int sx = x;
+                                    int sy = y;
+                                    Thread thread = new Thread(() -> {
+                                        while (there(sx, sy, Blocks.scrapWallLarge)) {
+                                            for (int rot = 0; rot < 360; rot += 35) {
+                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 0f + rot, 1f, 1f);
+                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 90f + rot, 1f, 1f);
+                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 180f + rot, 1f, 1f);
+                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 270f + rot, 1f, 1f);
+                                                if (there(sx, sy, Blocks.scrapWallLarge)) sleep(500);
+                                            }
+                                        }
+                                        blockThread.removeKey(tile);
+                                    });
+                                    blockThread.put(tile, thread);
+                                    thread.start();
+                                }
+                            } else if (block == Blocks.scrapWallGigantic) {
+                                if (!blockThread.containsKey(tile)) {
+                                    int sx = x;
+                                    int sy = y;
+                                    Thread thread = new Thread(() -> {
+                                        while (there(sx, sy, Blocks.scrapWallGigantic)) {
+                                            for (int rot = 0; rot < 360; rot += 2) {
+                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, rot, 1f, 1f);
+                                                if (there(sx, sy, Blocks.scrapWallGigantic)) sleep(64);
+                                            }
+                                        }
+                                        blockThread.removeKey(tile);
+                                    });
+                                    blockThread.put(tile, thread);
+                                    thread.start();
+                                }
+                            } else if (block == Blocks.scrapWallHuge) {
+                                if (!blockThread.containsKey(tile)) {
+                                    int sx = x;
+                                    int sy = y;
+                                    Thread thread = new Thread(() -> {
+                                        while (there(sx, sy, Blocks.scrapWallHuge)) {
+                                            float angle = getClosestPlayer(tile) != null ? tile.angleTo(getClosestPlayer(tile).getX(), getClosestPlayer(tile).getY()) : 0f;
+
+                                            Call.createBullet(Bullets.flakScrap, team, drawx, drawy, angle, 1f, 1f);
+                                            if (there(sx, sy, Blocks.scrapWallHuge)) sleep(96);
+                                        }
+                                        blockThread.removeKey(tile);
+                                    });
+                                    blockThread.put(tile, thread);
+                                    thread.start();
+                                }
+                            } else if (block == Blocks.copperWall) {
+                            } else if (block == Blocks.copperWallLarge) {
+                            } else if (block == Blocks.titaniumWall) {
+                            } else if (block == Blocks.titaniumWallLarge) {
+                            } else if (block == Blocks.thoriumWall) {
+                            } else if (block == Blocks.thoriumWallLarge) {
+                            } else if (block == Blocks.surgeWall) {
+                            } else if (block == Blocks.surgeWallLarge) {
+                            } else if (block == Blocks.plastaniumWall) {
+                            } else if (block == Blocks.plastaniumWallLarge) {
+                            }
                         }
                     }
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
                 }
-            });
-            mainThread.start();
-        } else {
-            Log.info("Essential-Exp must have Essentials to use the playerDB.");
-            Core.app.dispose();
-            Core.app.exit();
+            }
+        });
+    }
+
+    public boolean there(int x, int y, Block block) {
+        return world.tile(x, y).link().block() == block;
+    }
+
+    public void sleep(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+    }
+
+    public Unit getClosestPlayer(Tile tile) {
+        return Units.closestEnemy(tile.getTeam(), tile.drawx(), tile.drawy(), 300f, e -> !e.isDead() && e.isFlying());
+        //return Units.closestEnemy(tile.getTeam(), tile.drawx(), tile.drawy(), 50f, Unit::isValid);
     }
 }
