@@ -1,6 +1,7 @@
 import arc.ApplicationListener;
 import arc.Core;
 import arc.Events;
+import arc.files.Fi;
 import arc.struct.Array;
 import arc.struct.ArrayMap;
 import arc.util.Align;
@@ -18,9 +19,14 @@ import mindustry.mod.Mods;
 import mindustry.plugin.Plugin;
 import mindustry.world.Block;
 import mindustry.world.Tile;
+import org.hjson.JsonObject;
+import org.hjson.JsonValue;
 
 import java.sql.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static mindustry.Vars.*;
 
@@ -34,6 +40,8 @@ public class Main extends Plugin {
 
     private static final Array<Float> multipilers = new Array<>();
     private static final Array<PlayerData> playerData = new Array<>();
+
+    public static final Fi root = Core.settings.getDataDirectory().child("mods/Essentials/");
 
     boolean active = false;
 
@@ -75,7 +83,6 @@ public class Main extends Plugin {
                     }
 
                     // 메인 스레드 설정
-                    Random r = new Random();
                     listener = new ApplicationListener() {
                         @Override
                         public void dispose() {
@@ -86,7 +93,16 @@ public class Main extends Plugin {
 
                     Core.app.addListener(listener);
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    JsonObject config = JsonValue.readHjson(root.child("config.hjson").readString()).asObject();
+                    if (!config.get("DBServer").asBoolean()) {
+                        Log.warn("But DBServer not enabled! Please turn on 'DBServer' option in config/mods/Essentials/config.hjson!");
+                    } else {
+                        Log.err("But can't connect database..");
+                        e.printStackTrace();
+                    }
+
+                    Core.app.dispose();
+                    Core.app.exit();
                 }
 
                 mainThread = new Thread(() -> {
@@ -231,8 +247,8 @@ public class Main extends Plugin {
     public void sleep(int ms) {
         try {
             Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException ignored) {
+            Thread.currentThread().interrupt();
         }
     }
 
