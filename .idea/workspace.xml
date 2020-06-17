@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="660b0d6b-18d6-4808-8f31-98eabee1da6b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Bundle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/PlayerData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/bundle/bundle.properties" afterDir="false" />
+    <list default="true" id="660b0d6b-18d6-4808-8f31-98eabee1da6b" name="Default Changelist" comment="Add plugin config check">
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/Main$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Main$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -42,13 +60,16 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Mindustry-master" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Mindustry" />
+    <property name="project.structure.last.edited" value="전역 라이브러리" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.33127752" />
     <property name="show.unlinked.gradle.project.popup" value="true" />
   </component>
   <component name="RecentsManager">
@@ -107,60 +128,103 @@
       <option name="project" value="LOCAL" />
       <updated>1590675868315</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Basic status upgrade">
+      <created>1590936776807</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1590936776807</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add player's bullet">
+      <created>1592105955224</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1592105955224</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add plugin config check">
+      <created>1592228074265</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1592228074265</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <MESSAGE value="기본 스탯 추가? (시험 안해봄)" />
     <MESSAGE value="Update README.md" />
     <MESSAGE value="Update .gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update .gitignore" />
+    <MESSAGE value="Basic status upgrade" />
+    <MESSAGE value="Add player's bullet" />
+    <MESSAGE value="Add plugin config check" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add plugin config check" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1204" y="263" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589718416925">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1204" y="263" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1589718416925" />
-    <state x="1407" y="524" key="#com.intellij.ide.util.MemberChooser" timestamp="1590934422725">
+    <state x="1407" y="524" key="#com.intellij.ide.util.MemberChooser" timestamp="1592087797684">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1407" y="524" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1400@0.0.2560.1400" timestamp="1590934422725" />
-    <state x="1135" y="279" key="CommitChangelistDialog2" timestamp="1590675867706">
+    <state x="1407" y="524" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1400@0.0.2560.1400" timestamp="1592087797684" />
+    <state x="1135" y="279" key="CommitChangelistDialog2" timestamp="1590936776094">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1135" y="279" key="CommitChangelistDialog2/0.0.2560.1400@0.0.2560.1400" timestamp="1590675867706" />
-    <state x="1131" y="461" key="DetectedRootsChooserDialog" timestamp="1590934757591">
+    <state x="1135" y="279" key="CommitChangelistDialog2/0.0.2560.1400@0.0.2560.1400" timestamp="1590936776094" />
+    <state x="1131" y="461" key="DetectedRootsChooserDialog" timestamp="1592398015776">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1131" y="461" key="DetectedRootsChooserDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1590934757591" />
-    <state x="1157" y="498" key="FileChooserDialogImpl" timestamp="1590934746558">
+    <state x="1131" y="461" key="DetectedRootsChooserDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1592398015776" />
+    <state x="1157" y="498" key="FileChooserDialogImpl" timestamp="1592398014867">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1157" y="498" key="FileChooserDialogImpl/0.0.2560.1400@0.0.2560.1400" timestamp="1590934746558" />
-    <state width="2202" height="344" key="GridCell.Tab.0.bottom" timestamp="1590936747907">
+    <state x="1157" y="498" key="FileChooserDialogImpl/0.0.2560.1400@0.0.2560.1400" timestamp="1592398014867" />
+    <state width="1899" height="303" key="GridCell.Tab.0.bottom" timestamp="1592141044109">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2202" height="344" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1590936747907" />
-    <state width="2202" height="344" key="GridCell.Tab.0.center" timestamp="1590936747907">
+    <state width="1899" height="303" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1592141044109" />
+    <state width="1899" height="303" key="GridCell.Tab.0.center" timestamp="1592141044109">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2202" height="344" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1590936747907" />
-    <state width="2202" height="344" key="GridCell.Tab.0.left" timestamp="1590936747907">
+    <state width="1899" height="303" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1592141044109" />
+    <state width="1899" height="303" key="GridCell.Tab.0.left" timestamp="1592141044109">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2202" height="344" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1590936747907" />
-    <state width="2202" height="344" key="GridCell.Tab.0.right" timestamp="1590936747907">
+    <state width="1899" height="303" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1592141044109" />
+    <state width="1899" height="303" key="GridCell.Tab.0.right" timestamp="1592141044109">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2202" height="344" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1590936747907" />
-    <state x="1142" y="501" key="Vcs.Push.Dialog.v2" timestamp="1590675871826">
+    <state width="1899" height="303" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1592141044109" />
+    <state x="1055" y="355" key="SettingsEditor" timestamp="1592397771181">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1142" y="501" key="Vcs.Push.Dialog.v2/0.0.2560.1400@0.0.2560.1400" timestamp="1590675871826" />
-    <state x="1120" y="348" width="766" height="616" key="find.popup" timestamp="1589720010529">
+    <state x="1055" y="355" key="SettingsEditor/0.0.2560.1400@0.0.2560.1400" timestamp="1592397771181" />
+    <state x="1142" y="501" key="Vcs.Push.Dialog.v2" timestamp="1592228078186">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1120" y="348" width="766" height="616" key="find.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1589720010529" />
+    <state x="1142" y="501" key="Vcs.Push.Dialog.v2/0.0.2560.1400@0.0.2560.1400" timestamp="1592228078186" />
+    <state x="1120" y="348" width="766" height="616" key="find.popup" timestamp="1592227110491">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1120" y="348" width="766" height="616" key="find.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1592227110491" />
     <state x="1245" y="357" width="672" height="676" key="search.everywhere.popup" timestamp="1590936378456">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
