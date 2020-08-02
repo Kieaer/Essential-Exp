@@ -3,11 +3,6 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
-version '8.0'
-
-sourceCompatibility = JavaVersion.VERSION_14
-targetCompatibility = JavaVersion.VERSION_14
-
 repositories {
     mavenCentral()
     jcenter()
@@ -22,13 +17,13 @@ dependencies {
 }
 
 jar {
-    enabled = false // disable original task
-    dependsOn(shadowJar) // add new task
+    enabled = false
+    dependsOn(shadowJar)
 }
 
 shadowJar {
-    archiveFileName = "Essential-Exp.jar" // remove jar classifier and version
-    minimize() // remove unused classes
+    archiveFileName = "${project.archivesBaseName}.jar"
+    minimize()
 }
 
 compileJava {
