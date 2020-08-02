@@ -3,17 +3,17 @@ import arc.Core;
 import arc.Events;
 import arc.files.Fi;
 import arc.struct.ArrayMap;
-import arc.struct.Seq;
+import arc.struct.Array;
 import arc.util.Log;
 import mindustry.content.Blocks;
 import mindustry.content.Bullets;
 import mindustry.entities.Units;
+import mindustry.entities.type.Unit;
 import mindustry.game.EventType;
 import mindustry.game.Team;
 import mindustry.gen.Call;
-import mindustry.gen.Unitc;
 import mindustry.mod.Mods;
-import mindustry.mod.Plugin;
+import mindustry.plugin.Plugin;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import org.hjson.JsonObject;
@@ -32,8 +32,8 @@ public class Main extends Plugin {
     public Map<String, Integer> data = new HashMap<>();
     Timer timer = new Timer();
 
-    private static final Seq<Float> multipilers = new Seq<>();
-    private static final Seq<PlayerData> playerData = new Seq<>();
+    private static final Array<Float> multipilers = new Array<>();
+    private static final Array<PlayerData> playerData = new Array<>();
 
     public static final Fi root = Core.settings.getDataDirectory().child("mods/Essentials/");
 
@@ -103,7 +103,7 @@ public class Main extends Plugin {
         if (conn == null) Log.info("Essential-Exp must have Essentials to use the playerDB.");
 
         Events.on(EventType.PlayEvent.class, e -> {
-            String name = state.map.name();
+            String name = world.getMap().name();
             System.out.println(name);
             if (name.equals("Bullet")) {
                 active = true;
@@ -131,10 +131,10 @@ public class Main extends Plugin {
                                     int sy = y;
                                     Thread thread = new Thread(() -> {
                                         while (there(sx, sy, Blocks.scrapWall)) {
-                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 0f, 1f, 1f, 1f);
-                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 90f, 1f, 1f, 1f);
-                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 180f, 1f, 1f, 1f);
-                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 270f, 1f, 1f, 1f);
+                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 0f, 1f, 1f);
+                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 90f, 1f, 1f);
+                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 180f, 1f, 1f);
+                                            Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 270f, 1f, 1f);
                                             if (there(sx, sy, Blocks.scrapWall)) sleep(500);
                                         }
                                         blockThread.removeKey(tile);
@@ -149,10 +149,10 @@ public class Main extends Plugin {
                                     Thread thread = new Thread(() -> {
                                         while (there(sx, sy, Blocks.scrapWallLarge)) {
                                             for (int rot = 0; rot < 360; rot += 35) {
-                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 0f + rot, 1f, 1f, 1f);
-                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 90f + rot, 1f, 1f, 1f);
-                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 180f + rot, 1f, 1f, 1f);
-                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 270f + rot, 1f, 1f, 1f);
+                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 0f + rot, 1f, 1f);
+                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 90f + rot, 1f, 1f);
+                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 180f + rot, 1f, 1f);
+                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, 270f + rot, 1f, 1f);
                                                 if (there(sx, sy, Blocks.scrapWallLarge)) sleep(500);
                                             }
                                         }
@@ -168,7 +168,7 @@ public class Main extends Plugin {
                                     Thread thread = new Thread(() -> {
                                         while (there(sx, sy, Blocks.scrapWallGigantic)) {
                                             for (int rot = 0; rot < 360; rot += 2) {
-                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, rot, 1f, 1f, 1f);
+                                                Call.createBullet(Bullets.standardCopper, team, drawx, drawy, rot, 1f, 1f);
                                                 if (there(sx, sy, Blocks.scrapWallGigantic)) sleep(64);
                                             }
                                         }
@@ -185,7 +185,7 @@ public class Main extends Plugin {
                                         while (there(sx, sy, Blocks.scrapWallHuge)) {
                                             float angle = getClosestPlayer(tile) != null ? tile.angleTo(getClosestPlayer(tile).getX(), getClosestPlayer(tile).getY()) : 0f;
 
-                                            Call.createBullet(Bullets.flakScrap, team, drawx, drawy, angle, 1f, 1f, 1f);
+                                            Call.createBullet(Bullets.flakScrap, team, drawx, drawy, angle, 1f, 1f);
                                             if (there(sx, sy, Blocks.scrapWallHuge)) sleep(96);
                                         }
                                         blockThread.removeKey(tile);
@@ -223,8 +223,8 @@ public class Main extends Plugin {
         }
     }
 
-    public Unitc getClosestPlayer(Tile tile) {
-        return Units.closestEnemy(tile.team(), tile.drawx(), tile.drawy(), 300f, e -> !e.dead() && e.isFlying());
+    public Unit getClosestPlayer(Tile tile) {
+        return Units.closestEnemy(tile.getTeam(), tile.drawx(), tile.drawy(), 300f, e -> !e.isDead() && e.isFlying());
         //return Units.closestEnemy(tile.getTeam(), tile.drawx(), tile.drawy(), 50f, Unit::isValid);
     }
 }
