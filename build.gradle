@@ -1,7 +1,4 @@
-plugins {
-    id 'java-library'
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
-}
+apply plugin: 'java-library'
 
 repositories {
     mavenCentral()
@@ -10,20 +7,17 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.github.Anuken.Arc:arc-core:v121.4'
-    compileOnly 'com.github.Anuken.Mindustry:core:v121.4'
+    compileOnly 'com.github.Anuken.Arc:arc-core:+'
+    compileOnly 'com.github.Anuken.Mindustry:core:+'
     implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     implementation 'com.github.PersonTheCat:hjson-java:master'
 }
 
 jar {
-    enabled = false
-    dependsOn(shadowJar)
-}
-
-shadowJar {
     archiveFileName = "${project.archivesBaseName}.jar"
-    minimize()
+    from{
+        configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it)}
+    }
 }
 
 compileJava {
